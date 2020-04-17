@@ -216,6 +216,10 @@ function processMessage(msg) {
             }
 
             break;
+        case 'poll_alarms':
+            adapter.log.info('Alarm polling');
+            pollAlarm();
+            break;
         default:
             adapter.log.error('Messages are not supported');
             break;
@@ -462,7 +466,7 @@ function pollAlarm() {
         dirs.forEach(dir => {
             adapter.log.info('Alarm on ' + dir);
             adapter.config.wires.forEach(wire =>
-                wire && wire.id === dir && readWire(wire));
+                wire && wire.id === dir && wire.property.indexOf('latch') !== -1 && readWire(wire));
         });
     });
 }
